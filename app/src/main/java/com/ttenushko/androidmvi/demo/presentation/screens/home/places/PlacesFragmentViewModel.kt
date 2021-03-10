@@ -23,8 +23,8 @@ internal class PlacesFragmentViewModel(
                 TrackSavedPlacesMiddleware(trackSavedPlacesUseCase)
             ),
             reducer = Reducer(),
-            intentToActionIntentToActionConverter = object :
-                IntentToActionConverter<Intention, Action> {
+            intentToActionConverter = object :
+                Converter<Intention, Action> {
                 override fun convert(intent: Intention): Action =
                     when (intent) {
                         is Intention.AddPlaceButtonClicked -> Action.AddPlaceButtonClicked

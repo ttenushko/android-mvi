@@ -1,5 +1,6 @@
 package com.ttenushko.mvi
 
-interface Dispatcher<T> {
-    fun dispatch(value: T)
+
+public interface Dispatcher<T> {
+    public fun dispatch(value: T)
 }

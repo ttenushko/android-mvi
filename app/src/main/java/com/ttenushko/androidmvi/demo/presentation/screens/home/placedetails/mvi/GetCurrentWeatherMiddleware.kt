@@ -15,8 +15,7 @@ internal class GetCurrentWeatherMiddleware(
 
     private val taskGetCurrentWeather = createGetCurrentWeatherTask()
 
-    override fun apply(chain: MviMiddleware.Chain<Action, State, Event>) {
-        super.apply(chain)
+    override fun onApply(chain: MviMiddleware.Chain<Action, State, Event>) {
         when (chain.action) {
             is Action.Reload -> {
                 if (!taskGetCurrentWeather.isRunning) {

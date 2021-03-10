@@ -1,6 +1,7 @@
 package com.ttenushko.mvi
 
-class LoggingMiddleware<A, S, E>(
+
+public class LoggingMiddleware<A, S, E>(
     private val logger: Logger<A, S>
 ) : MviMiddleware<A, S, E> {
 
@@ -20,7 +21,7 @@ class LoggingMiddleware<A, S, E>(
         closeHandler.close()
     }
 
-    interface Logger<A, S> {
-        fun log(action: A, oldState: S, newState: S)
+    public interface Logger<A, S> {
+        public fun log(action: A, oldState: S, newState: S)
     }
 }

@@ -2,20 +2,20 @@ package com.ttenushko.mvi
 
 import java.io.Closeable
 
-interface MviStore<I, S, E> : Runnable, Closeable {
-    val state: S
+public interface MviStore<I, S, E> : Runnable, Closeable {
+    public val state: S
 
-    fun dispatchIntent(intent: I)
-    fun addStateChangedListener(listener: StateChangedListener<S>)
-    fun removeStateChangedListener(listener: StateChangedListener<S>)
-    fun addEventListener(listener: EventListener<E>)
-    fun removeEventListener(listener: EventListener<E>)
+    public fun dispatchIntent(intent: I)
+    public fun addStateChangedListener(listener: StateChangedListener<S>)
+    public fun removeStateChangedListener(listener: StateChangedListener<S>)
+    public fun addEventListener(listener: EventListener<E>)
+    public fun removeEventListener(listener: EventListener<E>)
 
-    interface StateChangedListener<S> {
-        fun onStateChanged(state: S)
+    public interface StateChangedListener<S> {
+        public fun onStateChanged(state: S)
     }
 
-    interface EventListener<E> {
-        fun onEvent(event: E)
+    public interface EventListener<E> {
+        public fun onEvent(event: E)
     }
 }

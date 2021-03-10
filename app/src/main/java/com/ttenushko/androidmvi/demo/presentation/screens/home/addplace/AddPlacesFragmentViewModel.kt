@@ -27,13 +27,13 @@ internal class AddPlacesFragmentViewModel(
             bootstrapper = Bootstrapper(),
             middleware = listOf(
                 LoggingMiddleware(mviLogger),
-                MviPostProcessorMiddleware(listOf(SideEffects())),
+                MviPostProcessorMiddleware(listOf(sideEffectsHandler())),
                 SearchPlaceMiddleware(searchPlaceUseCase),
                 AddPlaceMiddleware(savePlaceUseCase)
             ),
-            reducer = Reducer(),
-            intentToActionIntentToActionConverter = object :
-                IntentToActionConverter<Intention, Action> {
+            reducer = reducer(),
+            intentToActionConverter = object :
+                Converter<Intention, Action> {
                 override fun convert(intent: Intention): Action =
                     when (intent) {
                         is Intention.SearchChanged -> Action.SearchChanged(intent.search)

@@ -1,8 +1,14 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
 
 archivesBaseName = "mvi-core"
 version = "$MVI_CORE_VERSION_NAME"
+
+kotlin {
+    explicitApi()
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

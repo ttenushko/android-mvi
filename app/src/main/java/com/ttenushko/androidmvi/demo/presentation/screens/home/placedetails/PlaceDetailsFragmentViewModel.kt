@@ -27,8 +27,8 @@ internal class PlaceDetailsFragmentViewModel(
                 DeletePlaceMiddleware(deletePlaceUseCase)
             ),
             reducer = Reducer(),
-            intentToActionIntentToActionConverter = object :
-                IntentToActionConverter<Intention, Action> {
+            intentToActionConverter = object :
+                Converter<Intention, Action> {
                 override fun convert(intent: Intention): Action =
                     when (intent) {
                         is Intention.DeleteClicked -> Action.DeleteClicked

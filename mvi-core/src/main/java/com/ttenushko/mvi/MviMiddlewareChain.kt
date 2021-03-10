@@ -7,7 +7,7 @@ internal class MviMiddlewareChain<A, S, E>(
     middleware: List<MviMiddleware<A, S, E>>
 ) : Closeable {
 
-    private var sequence = AtomicLong(0)
+    private var sequenceId = AtomicLong(0)
     private val chainData = SettableChainData<A, S, E>()
     private val chain: ChainItem<A, S, E> =
         middleware.foldRight(null as ChainItem<A, S, E>?) { middleware, nextChainItem ->
@@ -29,7 +29,7 @@ internal class MviMiddlewareChain<A, S, E>(
             stateProvider,
             actionDispatcher,
             eventDispatcher,
-            sequence.getAndIncrement()
+            sequenceId.getAndIncrement()
         )
         chain.apply()
         chainData.clear()
@@ -60,7 +60,7 @@ internal class MviMiddlewareChain<A, S, E>(
         }
 
         fun apply() {
-            val sequence = chainData.sequence
+            val sequence = chainData.sequenceId
             if (sequence != lastSequence) {
                 lastSequence = sequence
                 middleware.apply(this)
@@ -79,7 +79,7 @@ internal class MviMiddlewareChain<A, S, E>(
         private var _stateProvider: Provider<S>? = null
         private var _actionDispatcher: Dispatcher<A>? = null
         private var _eventDispatcher: Dispatcher<E>? = null
-        private var _sequence: Long? = 0
+        private var _sequenceId: Long? = 0
         override val action: A
             get() = _action
                 ?: throw IllegalStateException("Action is not set")
@@ -92,8 +92,8 @@ internal class MviMiddlewareChain<A, S, E>(
         override val eventDispatcher: Dispatcher<E>
             get() = _eventDispatcher
                 ?: throw IllegalStateException("Event dispatcher is not set")
-        override val sequence: Long
-            get() = _sequence
+        override val sequenceId: Long
+            get() = _sequenceId
                 ?: throw IllegalStateException("Sequence id is not set")
 
         fun set(
@@ -107,7 +107,7 @@ internal class MviMiddlewareChain<A, S, E>(
             _stateProvider = stateProvider
             _actionDispatcher = actionDispatcher
             _eventDispatcher = eventDispatcher
-            _sequence = sequence
+            _sequenceId = sequence
         }
 
         fun clear() {
@@ -115,7 +115,7 @@ internal class MviMiddlewareChain<A, S, E>(
             _stateProvider = null
             _actionDispatcher = null
             _eventDispatcher = null
-            _sequence = null
+            _sequenceId = null
         }
     }
 
@@ -124,6 +124,6 @@ internal class MviMiddlewareChain<A, S, E>(
         val stateProvider: Provider<S>
         val actionDispatcher: Dispatcher<A>
         val eventDispatcher: Dispatcher<E>
-        val sequence: Long
+        val sequenceId: Long
     }
 }

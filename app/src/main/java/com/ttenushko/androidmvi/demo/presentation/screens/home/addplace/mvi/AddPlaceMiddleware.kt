@@ -16,8 +16,7 @@ internal class AddPlaceMiddleware(
 
     private val taskAddPlace = createSavePlaceTask()
 
-    override fun apply(chain: MviMiddleware.Chain<Action, State, Event>) {
-        super.apply(chain)
+    override fun onApply(chain: MviMiddleware.Chain<Action, State, Event>) {
         when (val action = chain.action) {
             is Action.PlaceClicked -> {
                 if (!taskAddPlace.isRunning) {

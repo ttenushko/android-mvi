@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 @Suppress("SpellCheckingInspection")
 internal class MviStoreImpl<I, A, S, E>(
     initialState: S,
-    private val intentToActionConverter: IntentToActionConverter<I, A>? = null,
+    private val intentToActionConverter: Converter<I, A>? = null,
     private val bootstrapper: MviBootstrapper<A, S, E>? = null,
     middleware: Collection<MviMiddleware<A, S, E>>? = null,
     reducer: MviReducer<A, S>

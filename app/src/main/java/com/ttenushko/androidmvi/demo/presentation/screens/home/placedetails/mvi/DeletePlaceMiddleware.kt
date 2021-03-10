@@ -15,8 +15,7 @@ internal class DeletePlaceMiddleware(
 
     private val taskDeletePlace = createDeletePlaceTask()
 
-    override fun apply(chain: MviMiddleware.Chain<Action, State, Event>) {
-        super.apply(chain)
+    override fun onApply(chain: MviMiddleware.Chain<Action, State, Event>) {
         when (chain.action) {
             is Action.Delete -> {
                 if (!taskDeletePlace.isRunning) {

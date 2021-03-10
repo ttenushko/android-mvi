@@ -1,16 +1,16 @@
 package com.ttenushko.mvi
 
-object MviStores {
-    fun <I, A, S, E> create(
+public object MviStores {
+    public fun <I, A, S, E> create(
         initialState: S,
-        intentToActionIntentToActionConverter: IntentToActionConverter<I, A>? = null,
+        intentToActionConverter: Converter<I, A>? = null,
         bootstrapper: MviBootstrapper<A, S, E>? = null,
         middleware: Collection<MviMiddleware<A, S, E>>? = null,
         reducer: MviReducer<A, S>
     ): MviStore<I, S, E> =
         MviStoreImpl(
             initialState,
-            intentToActionIntentToActionConverter,
+            intentToActionConverter,
             bootstrapper,
             middleware,
             reducer

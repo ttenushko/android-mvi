@@ -16,8 +16,7 @@ internal class SearchPlaceMiddleware(
     private val search = ObservableValue("")
     private val taskSearchPlace = createSearchPlaceTask()
 
-    override fun apply(chain: MviMiddleware.Chain<Action, State, Event>) {
-        super.apply(chain)
+    override fun onApply(chain: MviMiddleware.Chain<Action, State, Event>) {
         when (val action = chain.action) {
             is Action.SearchChanged -> {
                 chain.proceed()

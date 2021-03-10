@@ -13,8 +13,7 @@ internal class TrackSavedPlacesMiddleware(
 
     private val taskTrackSavedPlaces = createTrackSavedPlacesTask()
 
-    override fun apply(chain: MviMiddleware.Chain<Action, PlacesStore.State, PlacesStore.Event>) {
-        super.apply(chain)
+    override fun onApply(chain: MviMiddleware.Chain<Action, PlacesStore.State, PlacesStore.Event>) {
         when (chain.action) {
             is Action.Initialize -> {
                 if (!taskTrackSavedPlaces.isRunning) {

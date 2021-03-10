@@ -2,15 +2,15 @@ package com.ttenushko.mvi
 
 import java.io.Closeable
 
-interface MviMiddleware<A, S, E> : Closeable {
-    fun apply(chain: Chain<A, S, E>)
+public interface MviMiddleware<A, S, E> : Closeable {
+    public fun apply(chain: Chain<A, S, E>)
 
-    interface Chain<A, S, E> {
-        val action: A
-        val state: S
-        val actionDispatcher: Dispatcher<A>
-        val eventDispatcher: Dispatcher<E>
+    public interface Chain<A, S, E> {
+        public val action: A
+        public val state: S
+        public val actionDispatcher: Dispatcher<A>
+        public val eventDispatcher: Dispatcher<E>
 
-        fun proceed()
+        public fun proceed()
     }
 }

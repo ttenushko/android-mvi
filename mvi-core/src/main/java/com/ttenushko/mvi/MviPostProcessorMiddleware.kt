@@ -1,6 +1,6 @@
 package com.ttenushko.mvi
 
-class MviPostProcessorMiddleware<A, S, E>(
+public class MviPostProcessorMiddleware<A, S, E>(
     private val postProcessors: List<PostProcessor<A, S, E>>
 ) : MviMiddleware<A, S, E> {
 
@@ -30,8 +30,8 @@ class MviPostProcessorMiddleware<A, S, E>(
         closeHandler.close()
     }
 
-    interface PostProcessor<A, S, E> {
-        fun process(
+    public interface PostProcessor<A, S, E> {
+        public fun process(
             action: A,
             oldState: S,
             newState: S,
@@ -40,3 +40,24 @@ class MviPostProcessorMiddleware<A, S, E>(
         )
     }
 }
+
+public fun <A, S, E> mviPostProcessor(
+    postProcessor: (
+        action: A,
+        oldState: S,
+        newState: S,
+        actionDispatcher: Dispatcher<A>,
+        eventDispatcher: Dispatcher<E>
+    ) -> Unit
+): MviPostProcessorMiddleware.PostProcessor<A, S, E> =
+    object : MviPostProcessorMiddleware.PostProcessor<A, S, E> {
+        override fun process(
+            action: A,
+            oldState: S,
+            newState: S,
+            actionDispatcher: Dispatcher<A>,
+            eventDispatcher: Dispatcher<E>
+        ) {
+            postProcessor(action, oldState, newState, actionDispatcher, eventDispatcher)
+        }
+    }

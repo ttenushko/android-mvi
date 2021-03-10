@@ -1,6 +1,7 @@
 package com.ttenushko.mvi
 
-abstract class MviMiddlewareImpl<A, S, E> :
+
+public abstract class MviMiddlewareImpl<A, S, E> :
     MviMiddleware<A, S, E> {
 
     private lateinit var _actionDispatcher: Dispatcher<A>
@@ -13,19 +14,24 @@ abstract class MviMiddlewareImpl<A, S, E> :
         onClose()
     }
 
-    override fun apply(chain: MviMiddleware.Chain<A, S, E>) {
+    final override fun apply(chain: MviMiddleware.Chain<A, S, E>) {
         closeHandler.checkNotClosed()
-        if (!::_actionDispatcher.isInitialized || _actionDispatcher != chain.actionDispatcher) {
-            _actionDispatcher = chain.actionDispatcher
+        when {
+            !::_actionDispatcher.isInitialized -> _actionDispatcher = chain.actionDispatcher
+            _actionDispatcher != chain.actionDispatcher -> throw IllegalArgumentException("Action dispatcher changed across MviMiddleware.apply() calls.")
         }
-        if (!::_eventDispatcher.isInitialized || _eventDispatcher != chain.eventDispatcher) {
-            _eventDispatcher = chain.eventDispatcher
+        when {
+            !::_eventDispatcher.isInitialized -> _eventDispatcher = chain.eventDispatcher
+            _eventDispatcher != chain.eventDispatcher -> throw IllegalArgumentException("Event dispatcher changed across MviMiddleware.apply() calls.")
         }
+        onApply(chain)
     }
 
-    override fun close() {
+    final override fun close() {
         closeHandler.close()
     }
+
+    protected abstract fun onApply(chain: MviMiddleware.Chain<A, S, E>)
 
     protected abstract fun onClose()
 }
