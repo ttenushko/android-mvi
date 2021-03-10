@@ -2,7 +2,7 @@ package com.ttenushko.mvi
 
 import java.util.concurrent.CopyOnWriteArraySet
 
-@Suppress("SpellCheckingInspection")
+
 internal class MviStoreImpl<I, A, S, E>(
     initialState: S,
     private val intentToActionConverter: Converter<I, A>? = null,
@@ -57,7 +57,7 @@ internal class MviStoreImpl<I, A, S, E>(
 
 
     init {
-        val reducerMiddleware = ReducerMiddleware(reducer) { updateState(it) }
+        val reducerMiddleware = ReducerMiddleware<A, S, E>(reducer) { updateState(it) }
         middlewareChain =
             MviMiddlewareChain(middleware?.plus(reducerMiddleware) ?: listOf(reducerMiddleware))
     }
@@ -176,7 +176,7 @@ internal class MviStoreImpl<I, A, S, E>(
     private fun instanceClosed(): Nothing =
         throw IllegalStateException("This instance is closed.")
 
-    private inner class ReducerMiddleware(
+    private class ReducerMiddleware<A, S, E>(
         private val reducer: MviReducer<A, S>,
         private val updateState: (S) -> Unit
     ) : MviMiddleware<A, S, E> {

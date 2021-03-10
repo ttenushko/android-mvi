@@ -1,8 +1,8 @@
 package com.ttenushko.mvi
 
-
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+
 
 internal class ValueQueueDrain<T>(private val consumer: (T) -> Unit) {
     private val queue: Queue<T> = LinkedList()
