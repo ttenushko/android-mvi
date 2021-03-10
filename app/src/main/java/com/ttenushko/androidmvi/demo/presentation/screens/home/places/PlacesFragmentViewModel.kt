@@ -10,8 +10,9 @@ import com.ttenushko.mvi.android.MviStoreViewModel
 
 internal class PlacesFragmentViewModel(
     private val mviLogger: MviLogger<Action, State>,
-    private val trackSavedPlacesUseCase: TrackSavedPlacesUseCase
-) : MviStoreViewModel<Intention, State, Event>() {
+    private val trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
+    savedState: Bundle?
+) : MviStoreViewModel<Intention, State, Event>(savedState) {
 
     override fun onCreateMviStore(savedState: Bundle?): MviStore<Intention, State, Event> =
         MviStores.create(
@@ -33,7 +34,10 @@ internal class PlacesFragmentViewModel(
             }
         )
 
-    override fun onSaveState(mviStore: MviStore<Intention, State, Event>, outState: Bundle) {
+    override fun onSaveMviStoreState(
+        mviStore: MviStore<Intention, State, Event>,
+        outState: Bundle
+    ) {
         // do nothing
     }
 }

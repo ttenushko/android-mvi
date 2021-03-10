@@ -14,7 +14,7 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mviStoreViewModel = getMviStoreViewModel(savedInstanceState).apply { run() }
+        mviStoreViewModel = getMviStoreViewModel().apply { run() }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             mviStoreViewModel.state.collect { onMviStateChanged(it) }
         }
@@ -36,5 +36,5 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
     protected abstract fun onMviEvent(event: E)
 
-    protected abstract fun getMviStoreViewModel(savedState: Bundle?): MviStoreViewModel<I, S, E>
+    protected abstract fun getMviStoreViewModel(): MviStoreViewModel<I, S, E>
 }

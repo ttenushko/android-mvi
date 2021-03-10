@@ -1,5 +1,6 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.placedetails.di
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
@@ -28,7 +29,10 @@ interface PlaceDetailsFragmentDependencies : ComponentDependencies {
 }
 
 @dagger.Module
-internal class PlaceDetailsFragmentModule(private val placeId: Long) {
+internal class PlaceDetailsFragmentModule(
+    private val placeId: Long,
+    private val savedState: Bundle?
+) {
     @Suppress("UNCHECKED_CAST")
     @Provides
     fun provideViewModel(
@@ -40,7 +44,8 @@ internal class PlaceDetailsFragmentModule(private val placeId: Long) {
             mviLogger as MviLogger<Action, PlaceDetailsStore.State>,
             placeId,
             getCurrentWeatherConditionsUseCase,
-            deletePlaceUseCase
+            deletePlaceUseCase,
+            savedState
         )
 }
 

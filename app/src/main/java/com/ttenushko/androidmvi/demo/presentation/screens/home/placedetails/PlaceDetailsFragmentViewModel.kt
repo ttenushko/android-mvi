@@ -13,8 +13,9 @@ internal class PlaceDetailsFragmentViewModel(
     private val mviLogger: MviLogger<Action, State>,
     private val placeId: Long,
     private val getCurrentWeatherConditionsUseCase: GetCurrentWeatherConditionsUseCase,
-    private val deletePlaceUseCase: DeletePlaceUseCase
-) : MviStoreViewModel<Intention, State, Event>() {
+    private val deletePlaceUseCase: DeletePlaceUseCase,
+    savedState: Bundle?
+) : MviStoreViewModel<Intention, State, Event>(savedState) {
 
     override fun onCreateMviStore(savedState: Bundle?): MviStore<Intention, State, Event> =
         MviStores.create(
@@ -38,7 +39,10 @@ internal class PlaceDetailsFragmentViewModel(
             }
         )
 
-    override fun onSaveState(mviStore: MviStore<Intention, State, Event>, outState: Bundle) {
+    override fun onSaveMviStoreState(
+        mviStore: MviStore<Intention, State, Event>,
+        outState: Bundle
+    ) {
         // do nothing
     }
 }

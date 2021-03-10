@@ -13,8 +13,9 @@ internal class AddPlacesFragmentViewModel(
     private val mviLogger: MviLogger<Action, State>,
     private val search: String,
     private val searchPlaceUseCase: SearchPlaceUseCase,
-    private val savePlaceUseCase: SavePlaceUseCase
-) : MviStoreViewModel<Intention, State, Event>() {
+    private val savePlaceUseCase: SavePlaceUseCase,
+    savedState: Bundle?
+) : MviStoreViewModel<Intention, State, Event>(savedState) {
 
     companion object {
         private const val SEARCH = "search"
@@ -32,19 +33,19 @@ internal class AddPlacesFragmentViewModel(
                 AddPlaceMiddleware(savePlaceUseCase)
             ),
             reducer = reducer(),
-            intentToActionConverter = object :
-                Converter<Intention, Action> {
-                override fun convert(intent: Intention): Action =
-                    when (intent) {
-                        is Intention.SearchChanged -> Action.SearchChanged(intent.search)
-                        is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)
-                    }
+            intentToActionConverter = converter { intent ->
+                when (intent) {
+                    is Intention.SearchChanged -> Action.SearchChanged(intent.search)
+                    is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)
+                }
             }
         )
     }
 
-
-    override fun onSaveState(mviStore: MviStore<Intention, State, Event>, outState: Bundle) {
+    override fun onSaveMviStoreState(
+        mviStore: MviStore<Intention, State, Event>,
+        outState: Bundle
+    ) {
         outState.putString(SEARCH, mviStore.state.search)
     }
 }

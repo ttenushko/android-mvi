@@ -65,7 +65,12 @@ class PlaceDetailsFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerPlaceDetailsFragmentComponent.builder()
             .placeDetailsFragmentDependencies(findComponentDependencies())
-            .placeDetailsFragmentModule(PlaceDetailsFragmentModule(arguments!!.getLong(ARG_PLACE_ID)))
+            .placeDetailsFragmentModule(
+                PlaceDetailsFragmentModule(
+                    arguments!!.getLong(ARG_PLACE_ID),
+                    savedInstanceState
+                )
+            )
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)
@@ -172,7 +177,6 @@ class PlaceDetailsFragment :
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
         ViewModelProviders.of(this, viewModelFactory)[PlaceDetailsFragmentViewModel::class.java]
 }

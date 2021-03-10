@@ -1,5 +1,6 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.places.di
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ttenushko.androidmvi.demo.di.dependency.ComponentDependencies
@@ -24,7 +25,9 @@ interface PlacesFragmentDependencies : ComponentDependencies {
 }
 
 @dagger.Module
-internal class PlacesFragmentModule {
+internal class PlacesFragmentModule(
+    private val savedState: Bundle?
+) {
     @Suppress("UNCHECKED_CAST")
     @Provides
     fun provideViewModel(
@@ -33,7 +36,8 @@ internal class PlacesFragmentModule {
     ): PlacesFragmentViewModel =
         PlacesFragmentViewModel(
             mviLogger as MviLogger<Action, PlacesStore.State>,
-            trackSavedPlacesUseCase
+            trackSavedPlacesUseCase,
+            savedState
         )
 }
 
@@ -53,6 +57,14 @@ internal abstract class ViewModelBindingModule {
     modules = [PlacesFragmentModule::class, ViewModelBindingModule::class]
 )
 internal interface PlacesFragmentComponent {
+
+    @Component.Builder
+    interface Builder {
+        fun placesFragmentDependencies(placesFragmentDependencies: PlacesFragmentDependencies): Builder
+        fun placesFragmentModule(placesFragmentModule: PlacesFragmentModule): Builder
+        fun build(): PlacesFragmentComponent
+    }
+
     fun inject(fragment: PlacesFragment)
 }
 

@@ -14,6 +14,7 @@ import com.ttenushko.androidmvi.demo.presentation.di.utils.findComponentDependen
 import com.ttenushko.androidmvi.demo.presentation.screens.home.Router
 import com.ttenushko.androidmvi.demo.presentation.screens.home.common.PlaceAdapter
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.di.DaggerPlacesFragmentComponent
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.di.PlacesFragmentModule
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.*
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.isVisible
@@ -35,6 +36,7 @@ class PlacesFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerPlacesFragmentComponent.builder()
             .placesFragmentDependencies(findComponentDependencies())
+            .placesFragmentModule(PlacesFragmentModule(savedInstanceState))
             .build()
             .inject(this)
         super.onCreate(savedInstanceState)

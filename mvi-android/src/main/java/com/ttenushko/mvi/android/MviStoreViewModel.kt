@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.asFlow
 
 
 @Suppress("EXPERIMENTAL_API_USAGE")
-public class MviStoreViewModel<I, S, E>(
-    savedState: Bundle?,
-    private val callback: Callback<I, S, E>
+public abstract class MviStoreViewModel<I, S, E>(
+    savedState: Bundle?
 ) : ViewModel() {
 
     private companion object {
@@ -25,7 +24,7 @@ public class MviStoreViewModel<I, S, E>(
     private val lock = Any()
     private var status = STATUS_IDLE
     private lateinit var stateFlow: MutableStateFlow<S>
-    private val eventsChannel = BroadcastChannel<E>(Channel.UNLIMITED)
+    private val eventsChannel = BroadcastChannel<E>(Channel.BUFFERED)
     private val mviStore: MviStore<I, S, E>
     private val stateChangedListener = object : MviStore.StateChangedListener<S> {
         override fun onStateChanged(state: S) {
@@ -42,7 +41,8 @@ public class MviStoreViewModel<I, S, E>(
 
 
     init {
-        mviStore = callback.onCreateMviStore(savedState).apply {
+        @Suppress("LeakingThis")
+        mviStore = onCreateMviStore(savedState).apply {
             addStateChangedListener(stateChangedListener)
             addEventListener(eventListener)
         }
@@ -68,7 +68,7 @@ public class MviStoreViewModel<I, S, E>(
         }
     }
 
-    override fun onCleared() {
+    final override fun onCleared() {
         super.onCleared()
         synchronized(lock) {
             when (status) {
@@ -107,14 +107,18 @@ public class MviStoreViewModel<I, S, E>(
         synchronized(lock) {
             when (status) {
                 STATUS_IDLE -> notRunning()
-                STATUS_RUNNING -> callback
+                STATUS_RUNNING -> Unit
                 STATUS_CLEARED -> instanceCleared()
                 else -> unsupportedStatus(status)
             }
-        }.also { callback ->
-            callback.onSaveMviStoreState(mviStore, outState)
+        }.also {
+            onSaveMviStoreState(mviStore, outState)
         }
     }
+
+    protected abstract fun onCreateMviStore(savedState: Bundle?): MviStore<I, S, E>
+
+    protected abstract fun onSaveMviStoreState(mviStore: MviStore<I, S, E>, outState: Bundle)
 
     private fun notRunning(): Nothing =
         throw IllegalStateException("This instance is not running yet. Call 'run()' first.")
@@ -124,9 +128,4 @@ public class MviStoreViewModel<I, S, E>(
 
     private fun unsupportedStatus(status: Int): Nothing =
         throw throw IllegalStateException("Unsupported status: $status.")
-
-    public interface Callback<I, S, E> {
-        public fun onCreateMviStore(savedState: Bundle?): MviStore<I, S, E>
-        public fun onSaveMviStoreState(mviStore: MviStore<I, S, E>, outState: Bundle)
-    }
 }

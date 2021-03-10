@@ -1,5 +1,6 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.addplace.di
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ttenushko.androidmvi.demo.di.dependency.ComponentDependencies
@@ -26,7 +27,10 @@ interface AddPlaceFragmentDependencies : ComponentDependencies {
 }
 
 @dagger.Module
-internal class AddPlaceFragmentModule(private val search: String) {
+internal class AddPlaceFragmentModule(
+    private val search: String,
+    private val savedState: Bundle?
+) {
     @Suppress("UNCHECKED_CAST")
     @Provides
     fun provideViewModel(
@@ -38,7 +42,8 @@ internal class AddPlaceFragmentModule(private val search: String) {
             mviLogger as MviLogger<Action, AddPlaceStore.State>,
             search,
             searchPlaceUseCase,
-            savePlaceUseCase
+            savePlaceUseCase,
+            savedState
         )
 }
 
