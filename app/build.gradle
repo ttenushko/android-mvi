@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation deps.support.appCompat
     implementation deps.support.lifecycle
+    implementation deps.support.lifecycleRuntime
     implementation deps.support.lifecycleExtensions
     implementation deps.support.constraintLayout
     implementation deps.support.navigationFragment

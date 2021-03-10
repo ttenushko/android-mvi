@@ -136,7 +136,7 @@ class AddPlaceFragment :
         }
     }
 
-    override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
+    override fun getMviStoreViewModel(savedState: Bundle?): MviStoreViewModel<Intention, State, Event>  =
         ViewModelProviders.of(this, viewModelFactory)[AddPlacesFragmentViewModel::class.java]
 
     private val searchTextWatcher = object : SearchView.OnQueryTextListener {

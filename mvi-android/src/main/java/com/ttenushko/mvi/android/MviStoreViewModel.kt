@@ -1,15 +1,19 @@
 package com.ttenushko.mvi.android
 
 import android.os.Bundle
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.ttenushko.mvi.MviStore
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
 
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 public class MviStoreViewModel<I, S, E>(
     savedState: Bundle?,
-    private val callback: Callback<I, S, E>,
+    private val callback: Callback<I, S, E>
 ) : ViewModel() {
 
     private companion object {
@@ -18,27 +22,24 @@ public class MviStoreViewModel<I, S, E>(
         private const val STATUS_CLEARED = 2
     }
 
-    private var lock = Any()
+    private val lock = Any()
     private var status = STATUS_IDLE
-    private val stateFlow: MutableStateFlow<S>
-    private val eventsLiveData = MutableLiveDataQueue<E>()
+    private lateinit var stateFlow: MutableStateFlow<S>
+    private val eventsChannel = BroadcastChannel<E>(Channel.UNLIMITED)
     private val mviStore: MviStore<I, S, E>
-    private val stateChangedListener =
-        object : MviStore.StateChangedListener<S> {
-            override fun onStateChanged(state: S) {
-                stateLiveData.postValue(state)
-            }
+    private val stateChangedListener = object : MviStore.StateChangedListener<S> {
+        override fun onStateChanged(state: S) {
+            stateFlow.value = state
         }
+    }
     private val eventListener = object : MviStore.EventListener<E> {
         override fun onEvent(event: E) {
-            eventsLiveData.postValue(event)
+            eventsChannel.offer(event)
         }
-
     }
-    public val state: LiveData<S>
-        get() = stateLiveData
-    public val events: LiveData<E>
-        get() = eventsLiveData
+    public val state: Flow<S> get() = stateFlow
+    public val events: Flow<E> = eventsChannel.asFlow()
+
 
     init {
         mviStore = callback.onCreateMviStore(savedState).apply {
@@ -126,9 +127,6 @@ public class MviStoreViewModel<I, S, E>(
 
     public interface Callback<I, S, E> {
         public fun onCreateMviStore(savedState: Bundle?): MviStore<I, S, E>
-        public fun onSaveMviStoreState(
-            mviStore: MviStore<I, S, E>,
-            outState: Bundle?
-        ): MviStore<I, S, E>
+        public fun onSaveMviStoreState(mviStore: MviStore<I, S, E>, outState: Bundle)
     }
 }

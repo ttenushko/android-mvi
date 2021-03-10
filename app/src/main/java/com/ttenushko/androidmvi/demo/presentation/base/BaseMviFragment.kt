@@ -2,7 +2,9 @@ package com.ttenushko.androidmvi.demo.presentation.base
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.ttenushko.mvi.android.MviStoreViewModel
+import kotlinx.coroutines.flow.collect
 
 abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
@@ -12,21 +14,15 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mviStoreViewModel = getMviStoreViewModel().apply { run(savedInstanceState) }
+        mviStoreViewModel = getMviStoreViewModel(savedInstanceState).apply { run() }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            mviStoreViewModel.state.collect { onMviStateChanged(it) }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            mviStoreViewModel.events.collect { onMviEvent(it) }
+        }
     }
-
-    override fun onStart() {
-        super.onStart()
-        mviStoreViewModel.state.observe(viewLifecycleOwner, mviStoreStateObserver)
-        mviStoreViewModel.events.observe(viewLifecycleOwner, mviStoreEventObserver)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mviStoreViewModel.state.removeObserver(mviStoreStateObserver)
-        mviStoreViewModel.events.removeObserver(mviStoreEventObserver)
-    }
-
+    
     override fun onSaveInstanceState(outState: Bundle) {
         mviStoreViewModel.saveState(outState)
         super.onSaveInstanceState(outState)
@@ -40,5 +36,5 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
     protected abstract fun onMviEvent(event: E)
 
-    protected abstract fun getMviStoreViewModel(): MviStoreViewModel<I, S, E>
+    protected abstract fun getMviStoreViewModel(savedState: Bundle?): MviStoreViewModel<I, S, E>
 }
