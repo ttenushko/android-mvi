@@ -23,12 +23,19 @@ public abstract class MviStoreViewModel<I, S, E>(
 
     private val lock = Any()
     private var status = STATUS_IDLE
-    private lateinit var stateFlow: MutableStateFlow<S>
+    private val stateFlow: MutableStateFlow<S> by lazy {
+        MutableStateFlow(mviStore.state)
+    }
     private val eventsChannel = BroadcastChannel<E>(Channel.BUFFERED)
-    private val mviStore: MviStore<I, S, E>
-    private val stateChangedListener = object : MviStore.StateChangedListener<S> {
-        override fun onStateChanged(state: S) {
-            stateFlow.value = state
+    private val mviStore: MviStore<I, S, E> by lazy {
+        onCreateMviStore(savedState).apply {
+            addStateChangedListener(stateChangedListener)
+            addEventListener(eventListener)
+        }
+    }
+    private val stateChangedListener = object : MviStore.StateChangedListener {
+        override fun onStateChanged() {
+            stateFlow.value = mviStore.state
         }
     }
     private val eventListener = object : MviStore.EventListener<E> {
@@ -38,16 +45,6 @@ public abstract class MviStoreViewModel<I, S, E>(
     }
     public val state: Flow<S> get() = stateFlow
     public val events: Flow<E> = eventsChannel.asFlow()
-
-
-    init {
-        @Suppress("LeakingThis")
-        mviStore = onCreateMviStore(savedState).apply {
-            addStateChangedListener(stateChangedListener)
-            addEventListener(eventListener)
-        }
-        stateFlow = MutableStateFlow(mviStore.state)
-    }
 
     public fun run() {
         synchronized(lock) {

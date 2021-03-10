@@ -21,7 +21,7 @@ internal class MviStoreImpl<I, A, S, E>(
     override var state: S = initialState
     private val middlewareChain: MviMiddlewareChain<A, S, E>
     private val stateChangedListeners =
-        CopyOnWriteArraySet<MviStore.StateChangedListener<S>>()
+        CopyOnWriteArraySet<MviStore.StateChangedListener>()
     private val eventListeners =
         CopyOnWriteArraySet<MviStore.EventListener<E>>()
     private val messageQueueDrain: ValueQueueDrain<Message<A, E>> =
@@ -74,12 +74,12 @@ internal class MviStoreImpl<I, A, S, E>(
         } else noIntentToActionConverter()
     }
 
-    override fun addStateChangedListener(listener: MviStore.StateChangedListener<S>) {
+    override fun addStateChangedListener(listener: MviStore.StateChangedListener) {
         closeHandler.checkNotClosed()
         stateChangedListeners.add(listener)
     }
 
-    override fun removeStateChangedListener(listener: MviStore.StateChangedListener<S>) {
+    override fun removeStateChangedListener(listener: MviStore.StateChangedListener) {
         stateChangedListeners.remove(listener)
     }
 
@@ -156,7 +156,7 @@ internal class MviStoreImpl<I, A, S, E>(
             this.state = newState
             stateChangedListeners.forEach { stateChangedListener ->
                 try {
-                    stateChangedListener.onStateChanged(newState)
+                    stateChangedListener.onStateChanged()
                 } catch (error: Throwable) {
                     throw RuntimeException("Error occured while updating state.", error)
                 }

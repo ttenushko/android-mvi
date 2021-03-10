@@ -23,7 +23,7 @@ internal class AddPlacesFragmentViewModel(
 
     override fun onCreateMviStore(savedState: Bundle?): MviStore<Intention, State, Event> {
         val search = savedState?.getString(SEARCH) ?: search
-        return MviStores.create(
+        return createMviStore(
             initialState = State(search, State.SearchResult.Success("", listOf()), false),
             bootstrapper = Bootstrapper(),
             middleware = listOf(
