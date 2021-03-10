@@ -3,7 +3,7 @@ package com.ttenushko.androidmvi.demo.presentation.screens.home.places
 import android.os.Bundle
 import com.ttenushko.androidmvi.demo.domain.application.usecase.TrackSavedPlacesUseCase
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.*
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.*
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.*
 import com.ttenushko.androidmvi.demo.presentation.utils.MviLogger
 import com.ttenushko.mvi.*
 import com.ttenushko.mvi.android.MviStoreViewModel
@@ -15,22 +15,20 @@ internal class PlacesFragmentViewModel(
 ) : MviStoreViewModel<Intention, State, Event>(savedState) {
 
     override fun onCreateMviStore(savedState: Bundle?): MviStore<Intention, State, Event> =
-        MviStores.create(
+        createMviStore(
             initialState = State(null, null, false),
-            bootstrapper = Bootstrapper(),
-            middleware = listOf(
-                LoggingMiddleware(mviLogger),
-                MviPostProcessorMiddleware(listOf(SideEffects())),
+            bootstrapper = bootstrapper(),
+            middleware = mviMiddleware(
+                loggingMiddleware(mviLogger),
+                mviPostProcessors(sideEffects()),
                 TrackSavedPlacesMiddleware(trackSavedPlacesUseCase)
             ),
-            reducer = Reducer(),
-            intentToActionConverter = object :
-                Converter<Intention, Action> {
-                override fun convert(intent: Intention): Action =
-                    when (intent) {
-                        is Intention.AddPlaceButtonClicked -> Action.AddPlaceButtonClicked
-                        is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)
-                    }
+            reducer = reducer(),
+            intentToActionConverter = converter { intent ->
+                when (intent) {
+                    is Intention.AddPlaceButtonClicked -> Action.AddPlaceButtonClicked
+                    is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)
+                }
             }
         )
 

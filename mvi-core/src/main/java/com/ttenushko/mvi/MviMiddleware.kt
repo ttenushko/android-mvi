@@ -14,3 +14,6 @@ public interface MviMiddleware<A, S, E> : Closeable {
         public fun proceed()
     }
 }
+
+public fun <A, S, E> mviMiddleware(vararg middleware: MviMiddleware<A, S, E>): List<MviMiddleware<A, S, E>> =
+    listOf(*middleware)

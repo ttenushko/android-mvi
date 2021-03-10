@@ -25,3 +25,13 @@ public class LoggingMiddleware<A, S, E>(
         public fun log(action: A, oldState: S, newState: S)
     }
 }
+
+public fun <A, S, E> loggingMiddleware(logger: LoggingMiddleware.Logger<A, S>): LoggingMiddleware<A, S, E> =
+    LoggingMiddleware(logger)
+
+public fun <A, S, E> loggingMiddleware(logger: (action: A, oldState: S, newState: S) -> Unit): LoggingMiddleware<A, S, E> =
+    LoggingMiddleware(object : LoggingMiddleware.Logger<A, S> {
+        override fun log(action: A, oldState: S, newState: S) {
+            logger(action, oldState, newState)
+        }
+    })

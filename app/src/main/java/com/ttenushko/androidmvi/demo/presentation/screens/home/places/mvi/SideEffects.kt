@@ -1,19 +1,12 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi
 
 import com.ttenushko.androidmvi.demo.presentation.screens.home.Router
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.Event
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.State
-import com.ttenushko.mvi.Dispatcher
-import com.ttenushko.mvi.MviPostProcessorMiddleware
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.Event
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.State
+import com.ttenushko.mvi.mviPostProcessor
 
-internal class SideEffects : MviPostProcessorMiddleware.PostProcessor<Action, State, Event> {
-    override fun process(
-        action: Action,
-        oldState: State,
-        newState: State,
-        actionDispatcher: Dispatcher<Action>,
-        eventDispatcher: Dispatcher<Event>
-    ) {
+internal fun sideEffects() =
+    mviPostProcessor<Action, State, Event> { action, _, _, _, eventDispatcher ->
         when (action) {
             is Action.AddPlaceButtonClicked -> {
                 eventDispatcher.dispatch(Event.Navigation(Router.Destination.AddPlace("")))
@@ -21,6 +14,8 @@ internal class SideEffects : MviPostProcessorMiddleware.PostProcessor<Action, St
             is Action.PlaceClicked -> {
                 eventDispatcher.dispatch(Event.Navigation(Router.Destination.PlaceDetails(action.place.id)))
             }
+            else -> {
+                // do nothing
+            }
         }
     }
-}

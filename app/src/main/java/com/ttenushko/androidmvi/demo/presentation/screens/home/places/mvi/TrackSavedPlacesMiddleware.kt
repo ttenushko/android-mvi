@@ -9,11 +9,11 @@ import com.ttenushko.mvi.MviMiddlewareImpl
 
 internal class TrackSavedPlacesMiddleware(
     private val trackSavedPlacesUseCase: TrackSavedPlacesUseCase
-) : MviMiddlewareImpl<Action, PlacesStore.State, PlacesStore.Event>() {
+) : MviMiddlewareImpl<Action, Store.State, Store.Event>() {
 
     private val taskTrackSavedPlaces = createTrackSavedPlacesTask()
 
-    override fun onApply(chain: MviMiddleware.Chain<Action, PlacesStore.State, PlacesStore.Event>) {
+    override fun onApply(chain: MviMiddleware.Chain<Action, Store.State, Store.Event>) {
         when (chain.action) {
             is Action.Initialize -> {
                 if (!taskTrackSavedPlaces.isRunning) {

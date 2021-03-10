@@ -61,3 +61,6 @@ public fun <A, S, E> mviPostProcessor(
             postProcessor(action, oldState, newState, actionDispatcher, eventDispatcher)
         }
     }
+
+public fun <A, S, E> mviPostProcessors(vararg postProcessors: MviPostProcessorMiddleware.PostProcessor<A, S, E>): MviPostProcessorMiddleware<A, S, E> =
+    MviPostProcessorMiddleware(listOf(*postProcessors))

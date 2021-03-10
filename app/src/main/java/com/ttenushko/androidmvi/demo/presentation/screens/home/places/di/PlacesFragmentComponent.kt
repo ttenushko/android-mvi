@@ -9,7 +9,7 @@ import com.ttenushko.androidmvi.demo.presentation.di.annotation.ViewModelKey
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.PlacesFragment
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.PlacesFragmentViewModel
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Action
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.MviLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.ViewModelFactory
@@ -35,7 +35,7 @@ internal class PlacesFragmentModule(
         trackSavedPlacesUseCase: TrackSavedPlacesUseCase
     ): PlacesFragmentViewModel =
         PlacesFragmentViewModel(
-            mviLogger as MviLogger<Action, PlacesStore.State>,
+            mviLogger as MviLogger<Action, Store.State>,
             trackSavedPlacesUseCase,
             savedState
         )

@@ -1,16 +1,9 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi
 
-import com.ttenushko.mvi.Dispatcher
-import com.ttenushko.mvi.MviBootstrapper
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.State
+import com.ttenushko.mvi.mviBootstrapper
 
-internal class Bootstrapper :
-    MviBootstrapper<Action, PlacesStore.State, PlacesStore.Event> {
-
-    override fun bootstrap(
-        state: PlacesStore.State,
-        actionDispatcher: Dispatcher<Action>,
-        eventDispatcher: Dispatcher<PlacesStore.Event>
-    ) {
+internal fun bootstrapper() =
+    mviBootstrapper<Action, State, Store.Event> { _, actionDispatcher, _ ->
         actionDispatcher.dispatch(Action.Initialize)
     }
-}

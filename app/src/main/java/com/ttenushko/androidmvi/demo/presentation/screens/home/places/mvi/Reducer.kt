@@ -1,15 +1,12 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi
 
 import com.ttenushko.androidmvi.demo.domain.utils.Either
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.State
-import com.ttenushko.mvi.MviReducer
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.State
+import com.ttenushko.mvi.mviReducer
 
-internal class Reducer : MviReducer<Action, State> {
-    override fun reduce(
-        action: Action,
-        state: State
-    ): State {
-        return when (action) {
+internal fun reducer() =
+    mviReducer<Action, State> { action, state ->
+        when (action) {
             is Action.Initialize -> {
                 state.copy(isLoading = false)
             }
@@ -29,4 +26,3 @@ internal class Reducer : MviReducer<Action, State> {
             else -> state
         }
     }
-}

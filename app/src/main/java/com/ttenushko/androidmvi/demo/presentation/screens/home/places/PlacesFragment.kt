@@ -15,7 +15,7 @@ import com.ttenushko.androidmvi.demo.presentation.screens.home.Router
 import com.ttenushko.androidmvi.demo.presentation.screens.home.common.PlaceAdapter
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.di.DaggerPlacesFragmentComponent
 import com.ttenushko.androidmvi.demo.presentation.screens.home.places.di.PlacesFragmentModule
-import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.PlacesStore.*
+import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.*
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.isVisible
 import com.ttenushko.mvi.android.MviStoreViewModel
