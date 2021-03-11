@@ -1,4 +1,6 @@
-apply from: 'project-properties.gradle'
+apply from: 'dependencies.gradle'
+apply from: 'tools.gradle'
+apply from: 'version.gradle'
 
 buildscript {
     ext.kotlin_version = '1.4.20'

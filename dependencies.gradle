@@ -1,13 +1,4 @@
 ext {
-    toolVersions = [
-            android: [
-                    buildTools: '26.0.3',
-                    compileSdk: 28,
-                    targetSdk : 28,
-                    minSdk    : 21
-            ]
-    ]
-
     deps = [
             support : [
                     appCompat          : 'androidx.appcompat:appcompat:1.0.2',
@@ -44,8 +35,5 @@ ext {
                     coroutinesAndroid: 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
             ]
     ]
-
-    MVI_CORE_VERSION_NAME = "0.9.1-SNAPSHOT"
-    MVI_ANDROID_VERSION_NAME = "0.9.1-SNAPSHOT"
 }
 

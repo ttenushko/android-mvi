@@ -7,11 +7,11 @@ archivesBaseName = "mvi-android"
 version = "$MVI_ANDROID_VERSION_NAME"
 
 android {
-    compileSdkVersion toolVersions.android.compileSdk
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion toolVersions.android.minSdk
-        targetSdkVersion toolVersions.android.targetSdk
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
