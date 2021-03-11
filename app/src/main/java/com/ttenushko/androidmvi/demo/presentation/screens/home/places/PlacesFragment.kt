@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ttenushko.androidmvi.demo.R
+import com.ttenushko.androidmvi.demo.databinding.FragmentAddPlaceBinding
+import com.ttenushko.androidmvi.demo.databinding.FragmentPlacesBinding
 import com.ttenushko.androidmvi.demo.domain.weather.model.Place
 import com.ttenushko.androidmvi.demo.presentation.base.BaseMviFragment
 import com.ttenushko.androidmvi.demo.presentation.di.utils.findComponentDependencies
@@ -19,8 +20,6 @@ import com.ttenushko.androidmvi.demo.presentation.screens.home.places.mvi.Store.
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.isVisible
 import com.ttenushko.mvi.android.MviStoreViewModel
-import kotlinx.android.synthetic.main.fragment_places.*
-import kotlinx.android.synthetic.main.layout_places_content.*
 import javax.inject.Inject
 
 class PlacesFragment :
@@ -32,6 +31,9 @@ class PlacesFragment :
     @Inject
     lateinit var eventLogger: MviEventLogger<Any>
     private var placeAdapter: PlaceAdapter? = null
+    private var _viewBinding: FragmentPlacesBinding? = null
+    private val viewBinding
+        get() = _viewBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerPlacesFragmentComponent.builder()
@@ -47,11 +49,13 @@ class PlacesFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_places, container, false)
+        FragmentPlacesBinding.inflate(inflater, container, false).also {
+            _viewBinding = it
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnAddPlace.setOnClickListener {
+        viewBinding.layoutContent.btnAddPlace.setOnClickListener {
             dispatchMviIntent(Intention.AddPlaceButtonClicked)
         }
         placeAdapter = PlaceAdapter(
@@ -62,13 +66,14 @@ class PlacesFragment :
                     dispatchMviIntent(Intention.PlaceClicked(place))
                 }
             })
-        placeList.adapter = placeAdapter
-        placeList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        viewBinding.layoutContent.placeList.adapter = placeAdapter
+        viewBinding.layoutContent.placeList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         placeAdapter = null
+        _viewBinding = null
     }
 
     override fun onStart() {
@@ -77,11 +82,11 @@ class PlacesFragment :
     }
 
     override fun onMviStateChanged(state: State) {
-        layoutContent.isVisible = (null != state.places)
-        layoutContentFilled.isVisible = (null != state.places && state.places.isNotEmpty())
-        layoutContentEmpty.isVisible = (null != state.places && state.places.isEmpty())
-        layoutError.isVisible = (null != state.error)
-        layoutLoading.isVisible = state.isLoading
+        viewBinding.layoutContent.root.isVisible = (null != state.places)
+        viewBinding.layoutContent.layoutContentFilled.isVisible = (null != state.places && state.places.isNotEmpty())
+        viewBinding.layoutContent.layoutContentEmpty.isVisible = (null != state.places && state.places.isEmpty())
+        viewBinding.layoutError.root.isVisible = (null != state.error)
+        viewBinding.layoutLoading.root.isVisible = state.isLoading
         if (null != state.places) {
             placeAdapter!!.set(state.places)
         } else {
@@ -99,5 +104,5 @@ class PlacesFragment :
     }
 
     override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
-        ViewModelProviders.of(this, viewModelFactory)[PlacesFragmentViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory).get(PlacesFragmentViewModel::class.java)
 }

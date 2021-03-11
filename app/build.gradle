@@ -1,7 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -20,14 +21,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "$compose_version"
     }
 }
 
@@ -46,7 +52,6 @@ dependencies {
     implementation deps.support.appCompat
     implementation deps.support.lifecycle
     implementation deps.support.lifecycleRuntime
-    implementation deps.support.lifecycleExtensions
     implementation deps.support.constraintLayout
     implementation deps.support.navigationFragment
     implementation deps.support.navigationUi

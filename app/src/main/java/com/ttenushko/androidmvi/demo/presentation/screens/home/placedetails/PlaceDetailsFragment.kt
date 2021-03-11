@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import com.ttenushko.androidmvi.demo.R
+import com.ttenushko.androidmvi.demo.databinding.FragmentAddPlaceBinding
+import com.ttenushko.androidmvi.demo.databinding.FragmentPlaceDetailsBinding
 import com.ttenushko.androidmvi.demo.presentation.base.BaseMviFragment
 import com.ttenushko.androidmvi.demo.presentation.base.DefaultErrorHandler
 import com.ttenushko.androidmvi.demo.presentation.di.utils.findComponentDependencies
@@ -22,7 +23,6 @@ import com.ttenushko.androidmvi.demo.presentation.utils.ValueUpdater
 import com.ttenushko.androidmvi.demo.presentation.utils.isDialogShown
 import com.ttenushko.androidmvi.demo.presentation.utils.showDialog
 import com.ttenushko.mvi.android.MviStoreViewModel
-import kotlinx.android.synthetic.main.fragment_place_details.*
 import javax.inject.Inject
 
 class PlaceDetailsFragment :
@@ -52,11 +52,14 @@ class PlaceDetailsFragment :
     }
     private val weatherIconUrl = ValueUpdater("") { iconUrl ->
         if (iconUrl.isNotBlank()) {
-            picasso.load(iconUrl).into(icon)
+            picasso.load(iconUrl).into(viewBinding.icon)
         } else {
-            icon.setImageBitmap(null)
+            viewBinding.icon.setImageBitmap(null)
         }
     }
+    private var _viewBinding: FragmentPlaceDetailsBinding? = null
+    private val viewBinding
+        get() = _viewBinding!!
 
     init {
         setHasOptionsMenu(true)
@@ -81,12 +84,20 @@ class PlaceDetailsFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_place_details, container, false)
+        FragmentPlaceDetailsBinding.inflate(inflater, container, false).also {
+            _viewBinding = it
+        }.root
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weatherIconUrl.set("")
-        pullRefreshLayout.setOnRefreshListener { dispatchMviIntent(Intention.Refresh) }
+        viewBinding.pullRefreshLayout.setOnRefreshListener { dispatchMviIntent(Intention.Refresh) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     override fun onStart() {
@@ -115,27 +126,29 @@ class PlaceDetailsFragment :
     override fun onMviStateChanged(state: State) {
         when {
             null != state.error -> {
-                layoutContent.visibility = View.GONE
-                layoutError.visibility = View.VISIBLE
+                viewBinding.layoutContent.visibility = View.GONE
+                viewBinding.layoutError.visibility = View.VISIBLE
             }
             null != state.weather -> {
-                layoutContent.visibility = View.VISIBLE
-                layoutError.visibility = View.GONE
-                place.text =
+                viewBinding.layoutContent.visibility = View.VISIBLE
+                viewBinding.layoutError.visibility = View.GONE
+                viewBinding.place.text =
                     "${state.weather.place.name}, ${state.weather.place.countyCode.toUpperCase()}"
-                temperature.text = "${state.weather.conditions.tempCurrent.toInt()}\u2103"
-                temp_min.text = "${state.weather.conditions.tempMin.toInt()}\u2103"
-                temp_max.text = "${state.weather.conditions.tempMax.toInt()}\u2103"
-                humidity.text = "${state.weather.conditions.humidity}%"
+                viewBinding.temperature.text =
+                    "${state.weather.conditions.tempCurrent.toInt()}\u2103"
+                viewBinding.tempMin.text = "${state.weather.conditions.tempMin.toInt()}\u2103"
+                viewBinding.tempMax.text = "${state.weather.conditions.tempMax.toInt()}\u2103"
+                viewBinding.humidity.text = "${state.weather.conditions.humidity}%"
             }
             else -> {
-                layoutContent.visibility = View.GONE
-                layoutError.visibility = View.GONE
+                viewBinding.layoutContent.visibility = View.GONE
+                viewBinding.layoutError.visibility = View.GONE
             }
         }
-        pullRefreshLayout.isRefreshing = state.isLoading
+        viewBinding.pullRefreshLayout.isRefreshing = state.isLoading
         menuItemDeleteVisibilityUpdater.set(state.isDeleteButtonVisible)
-        layoutProgress.visibility = if (state.isDeleting) View.VISIBLE else View.GONE
+        viewBinding.layoutProgress.root.visibility =
+            if (state.isDeleting) View.VISIBLE else View.GONE
         weatherIconUrl.set(state.weather?.descriptions?.firstOrNull()?.iconUrl ?: "")
     }
 
@@ -178,5 +191,5 @@ class PlaceDetailsFragment :
     }
 
     override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
-        ViewModelProviders.of(this, viewModelFactory)[PlaceDetailsFragmentViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory).get(PlaceDetailsFragmentViewModel::class.java)
 }

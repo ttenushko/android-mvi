@@ -2,12 +2,10 @@ package com.ttenushko.androidmvi.demo.presentation.screens.home.common
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ttenushko.androidmvi.demo.R
+import com.ttenushko.androidmvi.demo.databinding.ItemPlaceBinding
 import com.ttenushko.androidmvi.demo.domain.weather.model.Place
-import kotlinx.android.synthetic.main.item_place.view.*
 
 class PlaceAdapter(
     ctx: Context,
@@ -36,7 +34,13 @@ class PlaceAdapter(
         items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.item_place, parent, false))
+        return ViewHolder(
+            ItemPlaceBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -49,11 +53,11 @@ class PlaceAdapter(
     }
 
     inner class ViewHolder(
-        rootView: View
-    ) : RecyclerView.ViewHolder(rootView) {
+        private val viewBinding: ItemPlaceBinding
+    ) : RecyclerView.ViewHolder(viewBinding.root) {
 
         init {
-            rootView.setOnClickListener {
+            viewBinding.root.setOnClickListener {
                 adapterPosition.let { position ->
                     if (RecyclerView.NO_POSITION != position) {
                         handleItemClicked(position)
@@ -63,9 +67,9 @@ class PlaceAdapter(
         }
 
         fun bind(place: Place) {
-            itemView.placeTitle.text =
+            viewBinding.placeTitle.text =
                 "${place.name}, ${place.countyCode.toUpperCase()}"
-            itemView.placeLocation.text =
+            viewBinding.placeLocation.text =
                 "%.6f, %.6f".format(place.location.latitude, place.location.longitude)
         }
     }

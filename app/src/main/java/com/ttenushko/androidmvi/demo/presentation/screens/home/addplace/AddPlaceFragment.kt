@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ttenushko.androidmvi.demo.R
+import com.ttenushko.androidmvi.demo.databinding.FragmentAddPlaceBinding
 import com.ttenushko.androidmvi.demo.domain.weather.model.Place
 import com.ttenushko.androidmvi.demo.presentation.base.BaseMviFragment
 import com.ttenushko.androidmvi.demo.presentation.di.utils.findComponentDependencies
@@ -20,8 +20,6 @@ import com.ttenushko.androidmvi.demo.presentation.screens.home.common.PlaceAdapt
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.isVisible
 import com.ttenushko.mvi.android.MviStoreViewModel
-import kotlinx.android.synthetic.main.fragment_add_place.*
-import kotlinx.android.synthetic.main.toolbar_with_search.*
 import javax.inject.Inject
 
 
@@ -42,6 +40,10 @@ class AddPlaceFragment :
     @Inject
     lateinit var eventLogger: MviEventLogger<Any>
     private var placeAdapter: PlaceAdapter? = null
+    private var _viewBinding: FragmentAddPlaceBinding? = null
+    private val viewBinding
+        get() = _viewBinding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerAddPlaceFragmentComponent.builder()
@@ -62,7 +64,9 @@ class AddPlaceFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_add_place, container, false)
+        FragmentAddPlaceBinding.inflate(inflater, container, false).also {
+            _viewBinding = it
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,11 +78,11 @@ class AddPlaceFragment :
                     dispatchMviIntent(Intention.PlaceClicked(place))
                 }
             })
-        placeList.apply {
+        viewBinding.placeList.apply {
             adapter = placeAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
-        searchView.apply {
+        viewBinding.toolbar.searchView.apply {
             isFocusable = true
             isIconified = false
             setOnQueryTextListener(searchTextWatcher)
@@ -89,8 +93,9 @@ class AddPlaceFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchView.setOnQueryTextListener(null)
+        viewBinding.toolbar.searchView.setOnQueryTextListener(null)
         placeAdapter = null
+        _viewBinding = null
     }
 
     override fun onStart() {
@@ -99,10 +104,10 @@ class AddPlaceFragment :
     }
 
     override fun onMviStateChanged(state: State) {
-        if (state.search != searchView.query.toString()) {
-            searchView.setOnQueryTextListener(null)
-            searchView.setQuery(state.search, true)
-            searchView.setOnQueryTextListener(searchTextWatcher)
+        if (state.search != viewBinding.toolbar.searchView.query.toString()) {
+            viewBinding.toolbar.searchView.setOnQueryTextListener(null)
+            viewBinding.toolbar.searchView.setQuery(state.search, true)
+            viewBinding.toolbar.searchView.setOnQueryTextListener(searchTextWatcher)
         }
         when (val searchResult = state.searchResult) {
             is State.SearchResult.Success -> {
@@ -112,22 +117,22 @@ class AddPlaceFragment :
                 placeAdapter!!.clear()
             }
         }
-        progress.isVisible = state.isSearching
+        viewBinding.progress.isVisible = state.isSearching
         when {
             state.isShowSearchPrompt -> {
-                message.isVisible = true
-                message.text = "Start typing text to search"
+                viewBinding.message.isVisible = true
+                viewBinding.message.text = "Start typing text to search"
             }
             state.isShowSearchNoResultsPrompt -> {
-                message.isVisible = true
-                message.text = "Nothing found"
+                viewBinding.message.isVisible = true
+                viewBinding.message.text = "Nothing found"
             }
             state.isShowSearchErrorPrompt -> {
-                message.isVisible = true
-                message.text = "Error occurred"
+                viewBinding.message.isVisible = true
+                viewBinding.message.text = "Error occurred"
             }
             else -> {
-                message.isVisible = false
+                viewBinding.message.isVisible = false
             }
         }
     }
@@ -142,7 +147,7 @@ class AddPlaceFragment :
     }
 
     override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
-        ViewModelProviders.of(this, viewModelFactory)[AddPlacesFragmentViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory).get(AddPlacesFragmentViewModel::class.java)
 
     private val searchTextWatcher = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(text: String): Boolean {
