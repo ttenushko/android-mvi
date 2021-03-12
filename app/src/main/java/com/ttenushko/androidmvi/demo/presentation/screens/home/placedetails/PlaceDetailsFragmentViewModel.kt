@@ -30,8 +30,8 @@ internal class PlaceDetailsFragmentViewModel(
             reducer = Reducer(),
             intentToActionConverter = object :
                 Converter<Intention, Action> {
-                override fun convert(intent: Intention): Action =
-                    when (intent) {
+                override fun convert(input: Intention): Action =
+                    when (input) {
                         is Intention.DeleteClicked -> Action.DeleteClicked
                         is Intention.DeleteConfirmed -> Action.Delete
                         is Intention.Refresh -> Action.Reload

@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
 }
 
@@ -21,19 +21,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+//        compose true
+        viewBinding true
+    }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose true
-        viewBinding true
-    }
     composeOptions {
-        kotlinCompilerExtensionVersion "$compose_version"
+        kotlinCompilerExtensionVersion "1.0.0-beta02"
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -65,5 +71,17 @@ dependencies {
     implementation deps.kassava
     implementation deps.picasso
     implementation deps.dagger2.dagger
+
     kapt deps.dagger2.daggerCompiler
+
+    implementation deps.compose.ui
+    implementation deps.compose.uiTooling
+    implementation deps.compose.foundation
+    implementation deps.compose.material
+    implementation deps.compose.materialIcons
+    implementation deps.compose.materialIconsExtended
+    implementation deps.compose.activity
+    implementation deps.compose.viewModel
+    implementation deps.compose.liveData
+    implementation deps.compose.runtime
 }

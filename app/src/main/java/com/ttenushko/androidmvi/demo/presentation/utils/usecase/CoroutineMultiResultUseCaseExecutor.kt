@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 internal class CoroutineMultiResultUseCaseExecutor<P : Any, R : Any, T>(
     private val coroutineScope: CoroutineScope,
     private val useCaseProvider: (P, T) -> MultiResultUseCase<P, R>
@@ -74,7 +75,6 @@ internal class CoroutineMultiResultUseCaseExecutor<P : Any, R : Any, T>(
         synchronized(lock) {
             if (ctx === useCaseContext) {
                 useCaseContext = null
-                Unit
             } else null
         }?.also {
             completeHandler?.invoke(tag)
@@ -85,7 +85,6 @@ internal class CoroutineMultiResultUseCaseExecutor<P : Any, R : Any, T>(
         synchronized(lock) {
             if (ctx === useCaseContext) {
                 useCaseContext = null
-                Unit
             } else null
         }?.also {
             errorHandler?.invoke(error, tag)
@@ -96,7 +95,6 @@ internal class CoroutineMultiResultUseCaseExecutor<P : Any, R : Any, T>(
         synchronized(lock) {
             if (ctx === useCaseContext) {
                 useCaseContext = null
-                Unit
             } else null
         }
     }

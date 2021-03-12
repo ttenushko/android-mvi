@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposables
 import java.util.concurrent.CopyOnWriteArraySet
 
-class ObservableValue<T>(defaultValue: T) {
+class ObservableValue<T : Any>(defaultValue: T) {
 
     private val observers = CopyOnWriteArraySet<ValueObserver<T>>()
     private var value: T = defaultValue
@@ -34,7 +34,7 @@ class ObservableValue<T>(defaultValue: T) {
     }
 }
 
-fun <T> ObservableValue<T>.asRxObservable(): Observable<T> =
+fun <T : Any> ObservableValue<T>.asRxObservable(): Observable<T> =
     Observable.create { emitter ->
         val valueObserver = object : ObservableValue.ValueObserver<T> {
             override fun onChanged(value: T) {

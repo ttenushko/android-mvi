@@ -20,7 +20,7 @@ abstract class CoroutineMultiResultUseCase<P : Any, R : Any>(
             }
     }
 
-    @Suppress("DeferredResultUnused")
+    @Suppress("DeferredResultUnused", "EXPERIMENTAL_API_USAGE")
     final override fun execute(param: P, callback: MultiResultUseCase.Callback<R>): Cancellable =
         createCoroutineScope(defaultDispatcher).let { coroutineScope ->
             val actor = coroutineScope.actor<R>(capacity = channelCapacity) {
