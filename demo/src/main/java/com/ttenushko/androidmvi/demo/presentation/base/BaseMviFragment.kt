@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ttenushko.mvi.android.MviStoreViewModel
 import kotlinx.coroutines.flow.collect
@@ -20,14 +19,14 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
         mviStoreViewModel = getMviStoreViewModel().apply { run() }
     }
 
-    override fun onCreateView(
+    final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
+    ): View =
         ComposeView(requireContext()).apply {
             setContent {
-                content()
+                FragmentContent()
             }
         }
 
@@ -51,7 +50,7 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
     }
 
     @Composable
-    protected abstract fun content()
+    protected abstract fun FragmentContent()
 
     protected abstract fun onMviStateChanged(state: S)
 

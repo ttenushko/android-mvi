@@ -63,6 +63,7 @@ dependencies {
     implementation deps.kotlinx.coroutines
     implementation deps.kotlinx.coroutinesAndroid
     implementation deps.dagger2.dagger
+    implementation deps.picasso
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
