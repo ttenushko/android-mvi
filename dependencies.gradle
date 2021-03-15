@@ -10,9 +10,10 @@ ext {
                     viewModelKtx       : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
                     viewModelSavedState: 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha01',
                     constraintLayout   : 'androidx.constraintlayout:constraintlayout:1.1.3',
-                    navigationFragment : 'androidx.navigation:navigation-fragment-ktx:2.1.0',
-                    navigationUi       : 'androidx.navigation:navigation-ui-ktx:2.1.0',
-                    cardView           : 'androidx.cardview:cardview:1.0.0'
+                    navigationFragment : 'androidx.navigation:navigation-fragment-ktx:2.3.4',
+                    navigationUi       : 'androidx.navigation:navigation-ui-ktx:2.3.4',
+                    cardView           : 'androidx.cardview:cardview:1.0.0',
+                    fragment           : 'androidx.fragment:fragment-ktx:1.3.1'
             ],
             compose : [
                     ui                   : 'androidx.compose.ui:ui:1.0.0-beta02',
