@@ -44,8 +44,8 @@ ext {
             kassava : 'au.com.console:kassava:1.0.0',
             picasso : 'com.squareup.picasso:picasso:2.71828',
             dagger2 : [
-                    dagger        : 'com.google.dagger:dagger:2.24',
-                    daggerCompiler: 'com.google.dagger:dagger-compiler:2.24'
+                    dagger        : 'com.google.dagger:dagger:2.33',
+                    daggerCompiler: 'com.google.dagger:dagger-compiler:2.33'
             ],
             kotlinx : [
                     coroutines       : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2',

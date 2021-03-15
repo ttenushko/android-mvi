@@ -45,6 +45,8 @@ dependencies {
     implementation project(':mvi-android')
     implementation deps.androidx.core
     implementation deps.androidx.appCompat
+    implementation deps.androidx.navigationFragment
+    implementation deps.androidx.navigationUi
     implementation deps.google.material
     implementation deps.compose.ui
     implementation deps.compose.uiTooling
@@ -60,8 +62,11 @@ dependencies {
     implementation deps.retrofit.converterGson
     implementation deps.kotlinx.coroutines
     implementation deps.kotlinx.coroutinesAndroid
+    implementation deps.dagger2.dagger
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    kapt deps.dagger2.daggerCompiler
 }
