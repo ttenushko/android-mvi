@@ -39,11 +39,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-  //  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':mvi-core')
     implementation deps.kotlinx.coroutines
-    implementation deps.support.appCompat
-    implementation deps.support.viewModelKtx
+    implementation deps.androidx.appCompat
+    implementation deps.androidx.viewModelKtx
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
