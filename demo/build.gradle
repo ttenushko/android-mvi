@@ -51,6 +51,9 @@ dependencies {
     implementation deps.compose.material
     implementation deps.compose.lifecycleRuntime
     implementation deps.compose.activity
+    implementation deps.rxJava
+    implementation deps.kassava
+    implementation deps.gson
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
