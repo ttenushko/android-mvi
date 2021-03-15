@@ -54,6 +54,10 @@ dependencies {
     implementation deps.rxJava
     implementation deps.kassava
     implementation deps.gson
+    implementation deps.okHttp.okHttp
+    implementation deps.okHttp.loggingInterceptor
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.converterGson
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
