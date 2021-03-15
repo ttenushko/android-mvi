@@ -58,6 +58,8 @@ dependencies {
     implementation deps.okHttp.loggingInterceptor
     implementation deps.retrofit.retrofit
     implementation deps.retrofit.converterGson
+    implementation deps.kotlinx.coroutines
+    implementation deps.kotlinx.coroutinesAndroid
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
