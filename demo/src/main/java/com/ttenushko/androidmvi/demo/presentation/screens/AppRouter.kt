@@ -11,6 +11,11 @@ interface AppRouter {
                 "GoBack"
         }
 
+        object Places : Destination() {
+            override fun toString(): String =
+                "Places"
+        }
+
         data class AddPlace(val search: String) : Destination()
         data class PlaceDetails(val placeId: Long) : Destination()
     }

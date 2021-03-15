@@ -15,8 +15,6 @@ interface PublicDependencies : Dependency {
     fun applicationSettings(): ApplicationSettings
     fun weatherForecastRepository(): WeatherForecastRepository
     fun picasso(): Picasso
-    fun mviEventLogger(): MviEventLogger<Any>
-    fun mviLogger(): MviLogger<Any, Any>
     fun router(): Router<AppRouter.Destination>
 
     @ApplicationContext

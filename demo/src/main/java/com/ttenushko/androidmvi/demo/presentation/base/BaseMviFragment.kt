@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collect
 abstract class BaseMviFragment<I, S, E> : BaseFragment() {
 
     private lateinit var mviStoreViewModel: MviStoreViewModel<I, S, E>
+    protected var savedInstanceState: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +24,19 @@ abstract class BaseMviFragment<I, S, E> : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View =
-        ComposeView(requireContext()).apply {
+    ): View {
+        this.savedInstanceState = savedInstanceState
+        return ComposeView(requireContext()).apply {
             setContent {
                 FragmentContent()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        savedInstanceState = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
