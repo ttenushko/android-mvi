@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 
 
@@ -43,7 +44,7 @@ public abstract class MviStoreViewModel<I, S, E>(
             eventsChannel.offer(event)
         }
     }
-    public val state: Flow<S> get() = stateFlow
+    public val state: StateFlow<S> get() = stateFlow
     public val events: Flow<E> = eventsChannel.asFlow()
 
     public fun run() {

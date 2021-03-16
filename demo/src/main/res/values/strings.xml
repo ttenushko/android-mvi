@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Demo</string>
+
+    <!-- places -->
+    <string name="places_title">Places</string>
+
+    <!-- errors -->
+    <string name="error_unknown">Error occurred.</string>
+
 </resources>
