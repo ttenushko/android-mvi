@@ -30,3 +30,12 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
         }
     }
 }
+
+inline fun <reified T : ViewModel> Fragment.viewModel(
+    crossinline provider: () -> T
+): T =
+    ViewModelProvider(this, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            provider() as T
+    })[T::class.java]
+

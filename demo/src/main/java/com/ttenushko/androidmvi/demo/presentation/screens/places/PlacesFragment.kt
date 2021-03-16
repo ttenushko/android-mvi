@@ -16,10 +16,6 @@ class PlacesFragment(
     private val viewModelProvider: (Bundle?) -> MviStoreViewModel<Intention, State, Event>
 ) : BaseMviFragment<Intention, State, Event>() {
 
-    private val viewModel: MviStoreViewModel<Intention, State, Event> by viewModel {
-        viewModelProvider(savedInstanceState)
-    }
-
     override fun onMviStateChanged(state: State) {
         // TODO: implement me
     }
@@ -29,8 +25,8 @@ class PlacesFragment(
         // TODO: implement me
     }
 
-    override fun getMviStoreViewModel(): MviStoreViewModel<Intention, State, Event> =
-        viewModel
+    override fun getMviStoreViewModel(savedInstanceState: Bundle?): MviStoreViewModel<Intention, State, Event> =
+        viewModel { viewModelProvider(savedInstanceState) }
 
     @Composable
     override fun FragmentContent() {
