@@ -20,6 +20,11 @@ class PlacesFragment(
 
     override fun onMviEvent(event: Event) {
         eventLogger.log(event)
+        when (event) {
+            is Event.Navigation -> {
+                router.navigateTo(event.destination)
+            }
+        }
         // TODO: implement me
     }
 

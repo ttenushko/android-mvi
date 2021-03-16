@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/placesFragment"
         android:name="com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesFragment"
-        android:label="PlacesFragment" />
+        android:label="PlacesFragment" >
+        <action
+            android:id="@+id/action_placesFragment_to_addPlaceFragment"
+            app:destination="@id/addPlaceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPlaceFragment"
+        android:name="com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlaceFragment"
+        android:label="AddPlaceFragment" />
 </navigation>

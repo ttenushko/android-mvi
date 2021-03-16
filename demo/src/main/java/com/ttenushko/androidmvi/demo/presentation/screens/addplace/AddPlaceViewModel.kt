@@ -9,7 +9,7 @@ import com.ttenushko.androidmvi.demo.presentation.utils.MviLogger
 import com.ttenushko.mvi.*
 import com.ttenushko.mvi.android.MviStoreViewModel
 
-internal class AddPlacesViewModel(
+internal class AddPlaceViewModel(
     private val mviLogger: MviLogger<Action, State>,
     private val search: String,
     private val searchPlaceUseCase: SearchPlaceUseCase,
@@ -26,9 +26,9 @@ internal class AddPlacesViewModel(
         return createMviStore(
             initialState = State(search, State.SearchResult.Success("", listOf()), false),
             bootstrapper = bootstrapper(),
-            middleware = listOf(
-                LoggingMiddleware(mviLogger),
-                MviPostProcessorMiddleware(listOf(sideEffects())),
+            middleware = mviMiddleware(
+                loggingMiddleware(mviLogger),
+                mviPostProcessors(sideEffects()),
                 SearchPlaceMiddleware(searchPlaceUseCase),
                 AddPlaceMiddleware(savePlaceUseCase)
             ),
