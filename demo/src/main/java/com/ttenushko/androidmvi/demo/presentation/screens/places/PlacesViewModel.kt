@@ -8,7 +8,7 @@ import com.ttenushko.androidmvi.demo.presentation.utils.MviLogger
 import com.ttenushko.mvi.*
 import com.ttenushko.mvi.android.MviStoreViewModel
 
-internal class PlacesFragmentViewModel(
+internal class PlacesViewModel(
     private val mviLogger: MviLogger<Action, State>,
     private val trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
     savedState: Bundle?

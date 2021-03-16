@@ -4,7 +4,7 @@ import com.ttenushko.androidmvi.demo.domain.application.usecase.TrackSavedPlaces
 import com.ttenushko.androidmvi.demo.presentation.base.Router
 import com.ttenushko.androidmvi.demo.presentation.screens.AppRouter
 import com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesFragment
-import com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesFragmentViewModel
+import com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesViewModel
 import com.ttenushko.androidmvi.demo.presentation.utils.MviEventLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.MviLogger
 import com.ttenushko.androidmvi.demo.presentation.utils.dagger.FragmentScope
@@ -47,7 +47,7 @@ class PlacesFragmentModule {
             router = router,
             eventLogger = MviEventLogger("PlacesFragment"),
             viewModelProvider = { savedState ->
-                PlacesFragmentViewModel(
+                PlacesViewModel(
                     mviLogger = MviLogger("PlacesFragment"),
                     trackSavedPlacesUseCase = trackSavedPlacesUseCase,
                     savedState = savedState
