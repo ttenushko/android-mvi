@@ -2,6 +2,7 @@ package com.ttenushko.androidmvi.demo.presentation.screens.addplace
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.ttenushko.androidmvi.demo.presentation.base.BaseMviFragment
 import com.ttenushko.androidmvi.demo.presentation.base.Router
 import com.ttenushko.androidmvi.demo.presentation.screens.AppRouter
@@ -28,12 +29,21 @@ class AddPlaceFragment(
 
     override fun onMviEvent(event: Event) {
         eventLogger.log(event)
-        // TODO: implement me
+        when (event) {
+            is Event.Navigation -> {
+                router.navigateTo(event.destination)
+            }
+        }
     }
 
     @Composable
     override fun FragmentContent(state: StateFlow<State>) {
-        // TODO: implement me
+        AddPlaceView(
+            state = state.collectAsState().value,
+            navigationClickHandler = { router.navigateTo(AppRouter.Destination.GoBack) },
+            searchChanged = { search -> dispatchMviIntent(Intention.SearchChanged(search)) },
+            placeClickHandler = { place -> dispatchMviIntent(Intention.PlaceClicked(place)) }
+        )
     }
 
     override fun getMviStoreViewModel(savedInstanceState: Bundle?): MviStoreViewModel<Intention, State, Event> =
