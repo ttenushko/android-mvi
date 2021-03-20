@@ -64,6 +64,13 @@ fun PlaceCards(
                 place,
                 placeClickHandler
             )
+            if (index == places.size - 1) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                )
+            }
         }
     }
 }

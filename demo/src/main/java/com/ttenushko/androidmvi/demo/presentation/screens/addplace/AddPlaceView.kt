@@ -1,10 +1,10 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.addplace
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -15,6 +15,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.android.material.color.MaterialColors
 import com.ttenushko.androidmvi.demo.R
 import com.ttenushko.androidmvi.demo.domain.weather.model.Place
 import com.ttenushko.androidmvi.demo.presentation.screens.addplace.mvi.Store.State
@@ -33,6 +35,7 @@ fun AddPlaceView(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    modifier = Modifier,
                     title = {
                         SearchInput(
                             Modifier
@@ -62,16 +65,30 @@ fun SearchInput(modifier: Modifier, search: String, searchChanged: (String) -> U
         value = search,
         onValueChange = searchChanged,
         singleLine = true,
+        leadingIcon = {
+            Icon(Icons.Filled.Search, "")
+        },
         modifier = modifier
-            .background(Color.Transparent)
-            .focusRequester(focusRequester),
-        textStyle = MaterialTheme.typography.subtitle1,
+            .focusRequester(focusRequester)
+            .wrapContentHeight()
+            .defaultMinSize(
+                minWidth = TextFieldDefaults.MinWidth,
+                minHeight = 20.dp
+            ),
+        textStyle = MaterialTheme.typography.subtitle2,
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.high),
+            unfocusedIndicatorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.42f),
+            disabledIndicatorColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+            backgroundColor = Color.Transparent,
+            cursorColor = MaterialTheme.colors.onPrimary
+        ),
         placeholder = {
             Text(
                 text = stringResource(id = R.string.add_place_search_hint),
                 style = MaterialTheme.typography.subtitle2
             )
-        }
+        },
     )
     DisposableEffect(Unit) {
         focusRequester.requestFocus()
