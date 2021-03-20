@@ -2,10 +2,10 @@ package com.ttenushko.androidmvi.demo.presentation.screens.places.mvi
 
 import com.ttenushko.androidmvi.demo.domain.utils.Either
 import com.ttenushko.androidmvi.demo.presentation.screens.places.mvi.Store.State
-import com.ttenushko.mvi.mviReducer
+import com.ttenushko.mvi.MviReducer
 
 internal fun reducer() =
-    mviReducer<Action, State> { action, state ->
+    MviReducer<Action, State> { action, state ->
         when (action) {
             is Action.Initialize -> {
                 state.copy(isLoading = false)

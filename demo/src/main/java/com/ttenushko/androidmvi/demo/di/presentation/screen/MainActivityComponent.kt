@@ -11,12 +11,16 @@ import com.ttenushko.androidmvi.demo.di.domain.UseCaseModule
 import com.ttenushko.androidmvi.demo.di.presentation.screen.addplace.AddPlaceFragmentDependencies
 import com.ttenushko.androidmvi.demo.di.presentation.screen.addplace.AddPlaceFragmentModule
 import com.ttenushko.androidmvi.demo.di.presentation.screen.addplace.DaggerAddPlaceFragmentComponent
+import com.ttenushko.androidmvi.demo.di.presentation.screen.placedetails.DaggerPlaceDetailsFragmentComponent
+import com.ttenushko.androidmvi.demo.di.presentation.screen.placedetails.PlaceDetailsFragmentDependencies
+import com.ttenushko.androidmvi.demo.di.presentation.screen.placedetails.PlaceDetailsFragmentModule
 import com.ttenushko.androidmvi.demo.di.presentation.screen.places.DaggerPlacesFragmentComponent
 import com.ttenushko.androidmvi.demo.di.presentation.screen.places.PlacesFragmentDependencies
 import com.ttenushko.androidmvi.demo.di.presentation.screen.places.PlacesFragmentModule
 import com.ttenushko.androidmvi.demo.presentation.screens.AppRouterImpl
 import com.ttenushko.androidmvi.demo.presentation.screens.MainActivity
 import com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlaceFragment
+import com.ttenushko.androidmvi.demo.presentation.screens.placedetails.PlaceDetailsFragment
 import com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesFragment
 import com.ttenushko.androidmvi.demo.presentation.utils.FragmentFactory
 import com.ttenushko.androidmvi.demo.presentation.utils.ViewModelFactory
@@ -40,7 +44,8 @@ import javax.inject.Provider
     ]
 )
 @ActivityScope
-interface MainActivityComponent : PlacesFragmentDependencies, AddPlaceFragmentDependencies {
+interface MainActivityComponent : PlacesFragmentDependencies, AddPlaceFragmentDependencies,
+    PlaceDetailsFragmentDependencies {
 
     @Component.Builder
     interface Builder {
@@ -56,7 +61,8 @@ interface MainActivityComponent : PlacesFragmentDependencies, AddPlaceFragmentDe
 @Module(
     includes = [
         PlacesFragmentProviderModule::class,
-        AddPlaceFragmentProviderModule::class
+        AddPlaceFragmentProviderModule::class,
+        PlaceDetailsFragmentProviderModule::class
     ]
 )
 class MainActivityModule(
@@ -90,6 +96,9 @@ interface DependenciesProviderModule {
 
     @Binds
     fun addPlaceFragmentDependencies(component: MainActivityComponent): AddPlaceFragmentDependencies
+
+    @Binds
+    fun placeDetailsFragmentDependencies(component: MainActivityComponent): PlaceDetailsFragmentDependencies
 }
 
 @Module(includes = [PlacesFragmentProviderModule.Bindings::class])
@@ -129,5 +138,25 @@ class AddPlaceFragmentProviderModule {
         @IntoMap
         @FragmentKey(AddPlaceFragment::class)
         fun bindFragment(fragment: AddPlaceFragment): Fragment
+    }
+}
+
+@Module(includes = [PlaceDetailsFragmentProviderModule.Bindings::class])
+class PlaceDetailsFragmentProviderModule {
+
+    @Provides
+    fun fragment(dependencies: PlaceDetailsFragmentDependencies): PlaceDetailsFragment =
+        DaggerPlaceDetailsFragmentComponent.builder()
+            .dependencies(dependencies = dependencies)
+            .fragmentModule(PlaceDetailsFragmentModule())
+            .build()
+            .fragment()
+
+    @Module
+    interface Bindings {
+        @Binds
+        @IntoMap
+        @FragmentKey(PlaceDetailsFragment::class)
+        fun bindFragment(fragment: PlaceDetailsFragment): Fragment
     }
 }

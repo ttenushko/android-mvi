@@ -33,7 +33,7 @@ internal class AddPlaceViewModel(
                 AddPlaceMiddleware(savePlaceUseCase)
             ),
             reducer = reducer(),
-            intentToActionConverter = converter { intent ->
+            intentToActionConverter = Converter { intent ->
                 when (intent) {
                     is Intention.SearchChanged -> Action.SearchChanged(intent.search)
                     is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)

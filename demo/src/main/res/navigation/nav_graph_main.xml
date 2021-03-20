@@ -11,9 +11,16 @@
         <action
             android:id="@+id/action_placesFragment_to_addPlaceFragment"
             app:destination="@id/addPlaceFragment" />
+        <action
+            android:id="@+id/action_placesFragment_to_placeDetailsFragment"
+            app:destination="@id/placeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPlaceFragment"
         android:name="com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlaceFragment"
         android:label="AddPlaceFragment" />
+    <fragment
+        android:id="@+id/placeDetailsFragment"
+        android:name="com.ttenushko.androidmvi.demo.presentation.screens.placedetails.PlaceDetailsFragment"
+        android:label="PlaceDetailsFragment" />
 </navigation>

@@ -4,6 +4,9 @@ public class MviPostProcessorMiddleware<A, S, E>(
     private val postProcessors: List<PostProcessor<A, S, E>>
 ) : MviMiddleware<A, S, E> {
 
+    public constructor(vararg postProcessors: PostProcessor<A, S, E>) :
+            this(listOf(*postProcessors))
+
     private val closeHandler = CloseHandler {
         // do nothing
     }
@@ -30,7 +33,7 @@ public class MviPostProcessorMiddleware<A, S, E>(
         closeHandler.close()
     }
 
-    public interface PostProcessor<A, S, E> {
+    public fun interface PostProcessor<A, S, E> {
         public fun process(
             action: A,
             oldState: S,
@@ -40,27 +43,6 @@ public class MviPostProcessorMiddleware<A, S, E>(
         )
     }
 }
-
-public fun <A, S, E> mviPostProcessor(
-    postProcessor: (
-        action: A,
-        oldState: S,
-        newState: S,
-        actionDispatcher: Dispatcher<A>,
-        eventDispatcher: Dispatcher<E>
-    ) -> Unit
-): MviPostProcessorMiddleware.PostProcessor<A, S, E> =
-    object : MviPostProcessorMiddleware.PostProcessor<A, S, E> {
-        override fun process(
-            action: A,
-            oldState: S,
-            newState: S,
-            actionDispatcher: Dispatcher<A>,
-            eventDispatcher: Dispatcher<E>
-        ) {
-            postProcessor(action, oldState, newState, actionDispatcher, eventDispatcher)
-        }
-    }
 
 public fun <A, S, E> mviPostProcessors(vararg postProcessors: MviPostProcessorMiddleware.PostProcessor<A, S, E>): MviPostProcessorMiddleware<A, S, E> =
     MviPostProcessorMiddleware(listOf(*postProcessors))

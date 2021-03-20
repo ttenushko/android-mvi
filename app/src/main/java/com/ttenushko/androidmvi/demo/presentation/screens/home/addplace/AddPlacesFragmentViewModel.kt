@@ -28,12 +28,12 @@ internal class AddPlacesFragmentViewModel(
             bootstrapper = Bootstrapper(),
             middleware = listOf(
                 LoggingMiddleware(mviLogger),
-                MviPostProcessorMiddleware(listOf(sideEffectsHandler())),
+                mviPostProcessors(sideEffectsHandler()),
                 SearchPlaceMiddleware(searchPlaceUseCase),
                 AddPlaceMiddleware(savePlaceUseCase)
             ),
             reducer = reducer(),
-            intentToActionConverter = converter { intent ->
+            intentToActionConverter = Converter { intent ->
                 when (intent) {
                     is Intention.SearchChanged -> Action.SearchChanged(intent.search)
                     is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)

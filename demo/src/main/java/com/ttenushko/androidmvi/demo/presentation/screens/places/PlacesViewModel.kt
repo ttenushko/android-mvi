@@ -24,7 +24,7 @@ internal class PlacesViewModel(
                 TrackSavedPlacesMiddleware(trackSavedPlacesUseCase)
             ),
             reducer = reducer(),
-            intentToActionConverter = converter { intent ->
+            intentToActionConverter = Converter { intent ->
                 when (intent) {
                     is Intention.AddPlaceButtonClicked -> Action.AddPlaceButtonClicked
                     is Intention.PlaceClicked -> Action.PlaceClicked(intent.place)

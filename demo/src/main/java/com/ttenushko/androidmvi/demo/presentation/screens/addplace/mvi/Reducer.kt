@@ -1,11 +1,11 @@
 package com.ttenushko.androidmvi.demo.presentation.screens.addplace.mvi
 
-
 import com.ttenushko.androidmvi.demo.presentation.screens.addplace.mvi.Store.State
-import com.ttenushko.mvi.mviReducer
+import com.ttenushko.mvi.MviReducer
+
 
 internal fun reducer() =
-    mviReducer<Action, State> { action, state ->
+    MviReducer<Action, State> { action, state ->
         var updatedState = when (action) {
             is Action.SearchChanged -> {
                 if (state.search != action.search) {
