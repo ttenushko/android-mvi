@@ -11,6 +11,9 @@
     <string name="add_place_no_results_prompt">Nothing found.</string>
     <string name="add_place_error_prompt">Error occurred.</string>
 
+    <!-- place details -->
+    <string name="place_details_title">Place Details</string>
+
     <!-- errors -->
     <string name="error_unknown">Error occurred.</string>
 

@@ -3,6 +3,7 @@ package com.ttenushko.androidmvi.demo.presentation.screens.placedetails
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.DialogFragment
 import com.squareup.picasso.Picasso
 import com.ttenushko.androidmvi.demo.presentation.base.BaseMviFragment
@@ -84,6 +85,10 @@ class PlaceDetailsFragment(
 
     @Composable
     override fun FragmentContent(state: StateFlow<State>) {
-        PlaceDetailsView(state = state.value)
+        PlaceDetailsView(
+            state = state.collectAsState().value,
+            navigationClickHandler = { router.navigateTo(AppRouter.Destination.GoBack) },
+            deleteClickHandler = { dispatchMviIntent(Intention.DeleteClicked) },
+        )
     }
 }
