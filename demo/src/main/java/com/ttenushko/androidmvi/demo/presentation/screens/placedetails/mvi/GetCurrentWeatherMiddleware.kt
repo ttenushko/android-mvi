@@ -35,7 +35,10 @@ internal class GetCurrentWeatherMiddleware(
 
     private fun createGetCurrentWeatherTask() =
         createExecutor<GetCurrentWeatherConditionsUseCase.Param, GetCurrentWeatherConditionsUseCase.Result, Unit>(
-            singleResultUseCaseProvider { _, _ -> getCurrentWeatherConditionsUseCase },
+            singleResultUseCaseProvider { _, _ ->
+                actionDispatcher.dispatch(Action.Reloading)
+                getCurrentWeatherConditionsUseCase
+            },
             { result, _ ->
                 actionDispatcher.dispatch(Action.Reloaded(Either.Right(result.weather)))
             },

@@ -92,6 +92,7 @@ class PlaceDetailsFragment(
                 state = state.collectAsState().value,
                 navigationClickHandler = { router.navigateTo(AppRouter.Destination.GoBack) },
                 deleteClickHandler = { dispatchMviIntent(Intention.DeleteClicked) },
+                onRefresh = { dispatchMviIntent(Intention.Refresh) }
             )
         }
     }

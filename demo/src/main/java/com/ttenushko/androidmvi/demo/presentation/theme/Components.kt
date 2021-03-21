@@ -40,6 +40,15 @@ fun SmallProgress(modifier: Modifier) {
 }
 
 @Composable
+fun MediumProgress(modifier: Modifier) {
+    CircularProgressIndicator(
+        modifier = modifier
+            .size(32.dp, 32.dp),
+        strokeWidth = 2.dp
+    )
+}
+
+@Composable
 fun PlaceCards(
     modifier: Modifier,
     places: List<Place>,
