@@ -102,7 +102,7 @@ dependencies {
     implementation deps.gson
     implementation deps.rxJava
     implementation deps.kassava
-    implementation deps.picasso
+    implementation deps.picasso.picasso
     implementation deps.dagger2.dagger
 
     kapt deps.dagger2.daggerCompiler

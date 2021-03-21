@@ -3,6 +3,7 @@ package com.ttenushko.androidmvi.demo.presentation.screens.placedetails
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.DialogFragment
 import com.squareup.picasso.Picasso
@@ -18,6 +19,7 @@ import com.ttenushko.androidmvi.demo.presentation.utils.isDialogShown
 import com.ttenushko.androidmvi.demo.presentation.utils.showDialog
 import com.ttenushko.androidmvi.demo.presentation.utils.viewModel
 import com.ttenushko.mvi.android.MviStoreViewModel
+import dev.chrisbanes.accompanist.picasso.LocalPicasso
 import kotlinx.coroutines.flow.StateFlow
 
 class PlaceDetailsFragment(
@@ -85,10 +87,12 @@ class PlaceDetailsFragment(
 
     @Composable
     override fun FragmentContent(state: StateFlow<State>) {
-        PlaceDetailsView(
-            state = state.collectAsState().value,
-            navigationClickHandler = { router.navigateTo(AppRouter.Destination.GoBack) },
-            deleteClickHandler = { dispatchMviIntent(Intention.DeleteClicked) },
-        )
+        CompositionLocalProvider(LocalPicasso provides picasso) {
+            PlaceDetailsView(
+                state = state.collectAsState().value,
+                navigationClickHandler = { router.navigateTo(AppRouter.Destination.GoBack) },
+                deleteClickHandler = { dispatchMviIntent(Intention.DeleteClicked) },
+            )
+        }
     }
 }

@@ -64,7 +64,8 @@ dependencies {
     implementation deps.kotlinx.coroutines
     implementation deps.kotlinx.coroutinesAndroid
     implementation deps.dagger2.dagger
-    implementation deps.picasso
+    implementation deps.picasso.picasso
+    implementation deps.picasso.accompanist
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

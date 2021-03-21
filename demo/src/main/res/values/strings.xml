@@ -13,6 +13,9 @@
 
     <!-- place details -->
     <string name="place_details_title">Place Details</string>
+    <string name="place_details_temp_min">Min</string>
+    <string name="place_details_temp_max">Max</string>
+    <string name="place_details_humidity">Humidity</string>
 
     <!-- errors -->
     <string name="error_unknown">Error occurred.</string>
